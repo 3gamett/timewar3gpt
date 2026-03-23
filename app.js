@@ -680,8 +680,15 @@ function applyHeal(battle, source, target, amount, label){
   if(healed > 0) battle.log(`${target.name} 回復 ${healed} (${label})`);
   return healed;
 }
-
-無敵は制御だけ無効
+function controlAttempt(battle, source, target, status, duration, label){
+  const payload = { battle, source, target, status, duration, label, cancelled: false };
+  battle.emit('controlAttempt', payload);
+  if(payload.cancelled) return false;
+  addStatus(target, { type: status, duration, source: label || '' });
+  if(status === 'taunt') target.tauntSourceSide = source.side;
+  battle.log(`${target.name} に ${status} 付与`);
+  return true;
+}
 
 function skillDamage(caster, target, power, damageType, scaleStatKey=null){
   const att = damageType === 'int' ? getStat(caster, 'int') : getStat(caster, 'atk');
@@ -714,6 +721,7 @@ function applyDamage(battle, attacker, target, damage, label){
     battle.emit('afterDamage', { battle, attacker, target, damage:0, label });
     return 0;
   }
+  if(target.invincibleTurns > 0){ battle.log(`${target.name} は無敵中`); }
 
   dmg = Math.round(dmg * Math.max(0, 1 + num(target.damageTakenPct,0)/100));
   if(target.shields > 0){
