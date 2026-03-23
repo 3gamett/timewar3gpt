@@ -10,7 +10,7 @@
   <header class="topbar">
     <div>
       <h1>時空戦記 Complete Skill Edition</h1>
-      <div class="sub">全スキル完全再現・デバッグ済み（時間操作は後回し）</div>
+      <div class="sub">全スキル完全再現・デバッグ済み</div>
     </div>
     <div class="top-actions">
       <button id="btnLoadDefault">初期化</button>
@@ -23,6 +23,11 @@
     <section class="panel log-panel">
       <div class="panel-head">
         <h2>戦闘ログ</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button id="btnPrevTurn">◀︎</button>
+          <span id="currentTurnLabel" style="font-weight: bold;">Turn 0</span>
+          <button id="btnNextTurn">▶︎</button>
+        </div>
         <div class="row">
           <button id="btnCopyLog">コピー</button>
           <button id="btnClearLog">消去</button>
