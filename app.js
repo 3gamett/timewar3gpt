@@ -1,0 +1,1817 @@
+
+const STORE = {
+  heroes: 'timewar.skill.heroes',
+  skills: 'timewar.skill.skills',
+  teams: 'timewar.skill.teams'
+};
+
+const DEFAULT_HEROES = [
+  {
+    "id": "zenobia",
+    "name": "ゼノビア",
+    "team": "A",
+    "atk": 79,
+    "def": 187,
+    "int": 134,
+    "agi": 93,
+    "rng": 2,
+    "unique": "palmera_resistance",
+    "subSlots": [
+      "repair_defense",
+      "eloquence"
+    ]
+  },
+  {
+    "id": "lincoln",
+    "name": "リンカーン",
+    "team": "A",
+    "atk": 128,
+    "def": 136,
+    "int": 214,
+    "agi": 128,
+    "rng": 4,
+    "unique": "freedom_proclamation",
+    "subSlots": [
+      "budo",
+      "sage_plot"
+    ]
+  },
+  {
+    "id": "kublai",
+    "name": "フビライ・ハン",
+    "team": "A",
+    "atk": 128,
+    "def": 137,
+    "int": 165,
+    "agi": 221,
+    "rng": 3,
+    "unique": "mongol_expansion",
+    "subSlots": [
+      "purge",
+      "sniper"
+    ]
+  },
+  {
+    "id": "lin",
+    "name": "リン",
+    "team": "A",
+    "atk": 150,
+    "def": 125,
+    "int": 250,
+    "agi": 200,
+    "rng": 5,
+    "unique": "red_eye_gaze",
+    "subSlots": [
+      "dragon_roar",
+      "all_heal"
+    ]
+  },
+  {
+    "id": "monet",
+    "name": "モネ",
+    "team": "A",
+    "atk": 25,
+    "def": 175,
+    "int": 275,
+    "agi": 35,
+    "rng": 2,
+    "unique": "phantom_art",
+    "subSlots": [
+      "nenriki_heal",
+      "iron_guard"
+    ]
+  },
+  {
+    "id": "carl",
+    "name": "カール",
+    "team": "A",
+    "atk": 100,
+    "def": 200,
+    "int": 150,
+    "agi": 50,
+    "rng": 3,
+    "unique": "rock_hammer",
+    "subSlots": [
+      "repair_defense",
+      "purge"
+    ]
+  },
+  {
+    "id": "mark",
+    "name": "マーク",
+    "team": "A",
+    "atk": 175,
+    "def": 175,
+    "int": 175,
+    "agi": 175,
+    "rng": 2,
+    "unique": "justice_heart",
+    "subSlots": [
+      "vampire",
+      "gather_power"
+    ]
+  },
+  {
+    "id": "zono",
+    "name": "ゾノ",
+    "team": "B",
+    "atk": 300,
+    "def": 75,
+    "int": 75,
+    "agi": 300,
+    "rng": 14,
+    "unique": "berserker",
+    "subSlots": [
+      "zangeki",
+      "follow_shot"
+    ]
+  },
+  {
+    "id": "george",
+    "name": "ジョージ",
+    "team": "B",
+    "atk": 75,
+    "def": 150,
+    "int": 200,
+    "agi": 170,
+    "rng": 5,
+    "unique": "artillery_king",
+    "subSlots": [
+      "supply",
+      "follow_shot"
+    ]
+  },
+  {
+    "id": "nobunaga",
+    "name": "織田信長",
+    "team": "B",
+    "atk": 320,
+    "def": 180,
+    "int": 150,
+    "agi": 260,
+    "rng": 5,
+    "unique": "flow_blaze_dance",
+    "subSlots": [
+      "budo",
+      "sage_plot"
+    ]
+  },
+  {
+    "id": "galileo",
+    "name": "ガリレオ・ガリレイ",
+    "team": "B",
+    "atk": 150,
+    "def": 150,
+    "int": 350,
+    "agi": 200,
+    "rng": 5,
+    "unique": "stillness_prayer",
+    "subSlots": [
+      "repair_defense",
+      "purple"
+    ]
+  }
+];
+const DEFAULT_SKILLS = [
+  {
+    "id": "palmera_resistance",
+    "name": "パルメラの抵抗",
+    "category": "passive",
+    "chance": 100,
+    "range": 5,
+    "behavior": "palmeraResistance"
+  },
+  {
+    "id": "freedom_proclamation",
+    "name": "自由の宣言",
+    "category": "engage",
+    "chance": 100,
+    "range": 5,
+    "behavior": "freedomProclamation"
+  },
+  {
+    "id": "mongol_expansion",
+    "name": "モンゴルの拡張",
+    "category": "engage",
+    "chance": 100,
+    "range": 3,
+    "behavior": "mongolExpansion"
+  },
+  {
+    "id": "red_eye_gaze",
+    "name": "赤眼の眼光",
+    "category": "passive",
+    "chance": 100,
+    "range": 5,
+    "behavior": "redEyeGaze"
+  },
+  {
+    "id": "phantom_art",
+    "name": "幻影の芸術",
+    "category": "engage",
+    "chance": 100,
+    "range": 2,
+    "behavior": "phantomArt"
+  },
+  {
+    "id": "rock_hammer",
+    "name": "岩壁の鉄槌",
+    "category": "active",
+    "chance": 45,
+    "range": 3,
+    "behavior": "rockHammer",
+    "chargeTurns": 1
+  },
+  {
+    "id": "justice_heart",
+    "name": "正義の心",
+    "category": "passive",
+    "chance": 100,
+    "range": 2,
+    "behavior": "justiceHeart"
+  },
+  {
+    "id": "berserker",
+    "name": "狂気のバーサーカー",
+    "category": "engage",
+    "chance": 100,
+    "range": 14,
+    "behavior": "berserker"
+  },
+  {
+    "id": "artillery_king",
+    "name": "鉄砲王",
+    "category": "engage",
+    "chance": 100,
+    "range": 5,
+    "behavior": "artilleryKing"
+  },
+  {
+    "id": "flow_blaze_dance",
+    "name": "流焔乱舞",
+    "category": "active",
+    "chance": 50,
+    "range": 5,
+    "behavior": "flowBlazeDance"
+  },
+  {
+    "id": "stillness_prayer",
+    "name": "静止の祈り",
+    "category": "active",
+    "chance": 55,
+    "range": 5,
+    "behavior": "stillnessPrayer"
+  },
+  {
+    "id": "repair_defense",
+    "name": "修復防御",
+    "category": "active",
+    "chance": 55,
+    "range": 3,
+    "behavior": "repairDefense"
+  },
+  {
+    "id": "budo",
+    "name": "文武両道",
+    "category": "active",
+    "chance": 50,
+    "range": 5,
+    "behavior": "budo"
+  },
+  {
+    "id": "sage_plot",
+    "name": "賢者の謀",
+    "category": "active",
+    "chance": 40,
+    "range": 4,
+    "behavior": "sagePlot"
+  },
+  {
+    "id": "eloquence",
+    "name": "巧みな弁舌",
+    "category": "active",
+    "chance": 40,
+    "range": 5,
+    "behavior": "eloquence"
+  },
+  {
+    "id": "final_battle",
+    "name": "最終決戦",
+    "category": "passive",
+    "chance": 100,
+    "range": 0,
+    "behavior": "finalBattle"
+  },
+  {
+    "id": "purge",
+    "name": "祓いの加護",
+    "category": "active",
+    "chance": 35,
+    "range": 2,
+    "behavior": "purge"
+  },
+  {
+    "id": "zangeki",
+    "name": "斬撃",
+    "category": "active",
+    "chance": 35,
+    "range": 5,
+    "behavior": "zangeki"
+  },
+  {
+    "id": "nenriki_heal",
+    "name": "念力の治癒",
+    "category": "active",
+    "chance": 35,
+    "range": 5,
+    "behavior": "nenrikiHeal"
+  },
+  {
+    "id": "vampire",
+    "name": "吸血",
+    "category": "passive",
+    "chance": 100,
+    "range": 0,
+    "behavior": "vampire"
+  },
+  {
+    "id": "follow_shot",
+    "name": "追撃の銃弾",
+    "category": "combo",
+    "chance": 35,
+    "range": 5,
+    "behavior": "followShot"
+  },
+  {
+    "id": "supply",
+    "name": "継戦補給",
+    "category": "combo",
+    "chance": 40,
+    "range": 5,
+    "behavior": "supply"
+  },
+  {
+    "id": "all_heal",
+    "name": "全面治癒",
+    "category": "engage",
+    "chance": 40,
+    "range": 0,
+    "behavior": "allHeal"
+  },
+  {
+    "id": "dragon_roar",
+    "name": "龍の咆哮",
+    "category": "active",
+    "chance": 50,
+    "range": 5,
+    "behavior": "dragonRoar"
+  },
+  {
+    "id": "sniper",
+    "name": "狙撃者の心得",
+    "category": "passive",
+    "chance": 100,
+    "range": 0,
+    "behavior": "sniper"
+  },
+  {
+    "id": "rainbow",
+    "name": "虹の景色",
+    "category": "engage",
+    "chance": 100,
+    "range": 5,
+    "behavior": "rainbow"
+  },
+  {
+    "id": "iron_guard",
+    "name": "鉄壁の守護",
+    "category": "engage",
+    "chance": 100,
+    "range": 0,
+    "behavior": "ironGuard"
+  },
+  {
+    "id": "gather_power",
+    "name": "機を蓄える",
+    "category": "passive",
+    "chance": 100,
+    "range": 0,
+    "behavior": "gatherPower"
+  },
+  {
+    "id": "purple",
+    "name": "(未使用)",
+    "category": "active",
+    "chance": 100,
+    "range": 0,
+    "behavior": "noop"
+  }
+];
+const DEFAULT_TEAMS = {
+  "left": [
+    {
+      "id": "george",
+      "troops": 10000,
+      "subSkills": [
+        "supply",
+        "follow_shot"
+      ]
+    },
+    {
+      "id": "lin",
+      "troops": 10000,
+      "subSkills": [
+        "dragon_roar",
+        "all_heal"
+      ]
+    },
+    {
+      "id": "mark",
+      "troops": 10000,
+      "subSkills": [
+        "repair_defense",
+        "nenriki_heal"
+      ]
+    }
+  ],
+  "right": [
+    {
+      "id": "lincoln",
+      "troops": 10000,
+      "subSkills": [
+        "budo",
+        "sage_plot"
+      ]
+    },
+    {
+      "id": "kublai",
+      "troops": 10000,
+      "subSkills": [
+        "purge",
+        "sniper"
+      ]
+    },
+    {
+      "id": "zenobia",
+      "troops": 10000,
+      "subSkills": [
+        "repair_defense",
+        "eloquence"
+      ]
+    }
+  ]
+};
+
+const POSITIONS = ['指揮官', '中軍', '前衛'];
+const CONTROL_SET = new Set(['stun', 'silence', 'confusion', 'frenzy', 'disarm', 'taunt', 'noheal']);
+const DEBUFF_SET = new Set(['atkDown', 'intDown', 'defDown', 'agiDown', 'damageTakenPct', 'damageDealPct']);
+
+let app = {
+  heroes: [],
+  skills: [],
+  teams: null,
+  battle: null,
+  auto: null
+};
+
+function clone(v){ return JSON.parse(JSON.stringify(v)); }
+function num(v, d=0){ const n = Number(v); return Number.isFinite(n) ? n : d; }
+function rand(){ return Math.random(); }
+function pick(arr){ return arr && arr.length ? arr[Math.floor(Math.random()*arr.length)] : null; }
+function sample(arr, n){
+  const pool = (arr || []).slice();
+  const out = [];
+  while(pool.length && out.length < n){
+    out.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+  }
+  return out;
+}
+function logEl(){ return document.getElementById('log'); }
+function log(msg){
+  const el = logEl();
+  if(!el) return;
+  el.textContent += (el.textContent ? "\n" : "") + msg;
+}
+function setLog(text){
+  const el = logEl();
+  if(el) el.textContent = text;
+}
+function getSkill(id){
+  return app.skills.find(s => s.id === id || s.name === id) || null;
+}
+function getHero(id){
+  return app.heroes.find(h => h.id === id || h.name === id) || null;
+}
+function sameTeam(a,b){ return !!a && !!b && a.side === b.side; }
+function enemyTeam(side){ return side === 'left' ? 'right' : 'left'; }
+function isAlive(u){ return !!u && num(u.currentTroops) > 0; }
+function withDefault(obj, key, fallback){ return num(obj && obj[key], fallback); }
+
+function rangeDistance(a,b){
+  return Math.abs(num(a.slotIndex)-num(b.slotIndex)) + 1;
+}
+function inRange(a,b,range){
+  return rangeDistance(a,b) <= num(range, num(a.rng, 1));
+}
+
+function statScale(stat){
+  const step = Math.max(0, Math.floor(num(stat)/50));
+  return 1 + (step * 0.10);
+}
+
+function loadState(){
+  try{ app.heroes = JSON.parse(localStorage.getItem(STORE.heroes)) || clone(DEFAULT_HEROES); }
+  catch{ app.heroes = clone(DEFAULT_HEROES); }
+
+  try{ app.skills = JSON.parse(localStorage.getItem(STORE.skills)) || clone(DEFAULT_SKILLS); }
+  catch{ app.skills = clone(DEFAULT_SKILLS); }
+
+  try{
+    const t = JSON.parse(localStorage.getItem(STORE.teams));
+    app.teams = (t && t.left && t.right) ? t : clone(DEFAULT_TEAMS);
+  }catch{
+    app.teams = clone(DEFAULT_TEAMS);
+  }
+
+  document.getElementById('heroesJson').value = JSON.stringify(app.heroes, null, 2);
+  document.getElementById('skillsJson').value = JSON.stringify(app.skills, null, 2);
+}
+
+function saveState(){
+  localStorage.setItem(STORE.heroes, JSON.stringify(app.heroes));
+  localStorage.setItem(STORE.skills, JSON.stringify(app.skills));
+  localStorage.setItem(STORE.teams, JSON.stringify(app.teams));
+}
+
+function renderAll(){
+  renderTeams();
+  renderStatus();
+  renderLog();
+}
+
+function renderStatus(){
+  const b = app.battle;
+  document.getElementById('turnBadge').textContent = `Turn ${b ? b.turn : 0}`;
+  document.getElementById('phaseBadge').textContent = `Phase: ${b ? b.phase : '-'}`;
+  document.getElementById('stateBadge').textContent = b ? (b.finished ? '終了' : '進行中') : '待機中';
+}
+
+function renderLog(){
+  if(!app.battle){
+    document.getElementById('log').textContent = '準備完了。サンプル編成を押して戦闘開始してください。';
+    return;
+  }
+  const turn = app.battle.viewTurn;
+  document.getElementById('log').textContent = (app.battle.logsByTurn[turn] || ['（ログなし）']).join('\n');
+}
+
+function renderTeams(){
+  const left = document.getElementById('leftSlots');
+  const right = document.getElementById('rightSlots');
+
+  const skillOptions = app.skills.filter(s => s.category === 'active' || s.category === 'combo' || s.category === 'passive' || s.category === 'engage');
+
+  function teamHTML(side){
+    return app.teams[side].map((slot, idx) => {
+      const hero = getHero(slot.id);
+      const heroLabel = hero ? hero.name : '未選択';
+      const s1 = slot.subSkills && slot.subSkills[0] ? slot.subSkills[0] : '';
+      const s2 = slot.subSkills && slot.subSkills[1] ? slot.subSkills[1] : '';
+      const selectable = skillOptions;
+      return `
+      <div class="slot">
+        <div class="label">${POSITIONS[idx]}</div>
+        <select onchange="updateSlot('${side}', ${idx}, 'id', this.value)">
+          <option value="">英傑を選ぶ</option>
+          ${app.heroes.map(h => `<option value="${h.id}" ${slot.id === h.id ? 'selected' : ''}>${h.name}</option>`).join('')}
+        </select>
+        <input type="number" value="${num(slot.troops, 10000)}" onchange="updateSlot('${side}', ${idx}, 'troops', this.value)">
+        <select onchange="updateSlot('${side}', ${idx}, 'sub1', this.value)">
+          <option value="">サブスキル1</option>
+          ${selectable.map(s => `<option value="${s.id}" ${s1 === s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
+        </select>
+        <select onchange="updateSlot('${side}', ${idx}, 'sub2', this.value)">
+          <option value="">サブスキル2</option>
+          ${selectable.map(s => `<option value="${s.id}" ${s2 === s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
+        </select>
+        <div class="meta">
+          ${hero ? `ID:${hero.id}<br>固有:${getSkill(hero.unique)?.name || hero.unique}<br>ATK:${hero.atk} DEF:${hero.def} INT:${hero.int} AGI:${hero.agi} RNG:${hero.rng}` : '未選択'}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  left.innerHTML = teamHTML('left');
+  right.innerHTML = teamHTML('right');
+}
+
+function updateSlot(side, idx, field, value){
+  const slot = app.teams[side][idx];
+  if(!slot) return;
+  if(field === 'id') slot.id = value;
+  if(field === 'troops') slot.troops = num(value, 10000);
+  if(field === 'sub1'){
+    slot.subSkills = slot.subSkills || [];
+    slot.subSkills[0] = value;
+  }
+  if(field === 'sub2'){
+    slot.subSkills = slot.subSkills || [];
+    slot.subSkills[1] = value;
+  }
+  saveState();
+  renderTeams();
+}
+window.updateSlot = updateSlot;
+
+class Battle {
+  constructor(teams){
+    this.turn = 0;
+    this.phase = 'opening';
+    this.finished = false;
+    this.viewTurn = 0;
+    this.logsByTurn = {0: []};
+    this.listeners = {
+      battleStart: [], turnStart: [], actionStart: [], skillAttempt: [], skillSuccess: [],
+      normalAttack: [], beforeDamage: [], afterDamage: [], controlAttempt: [], turnEnd: [], death: []
+    };
+
+    this.sides = {
+      left: this.buildSide('left', teams.left || []),
+      right: this.buildSide('right', teams.right || [])
+    };
+    this.units = [...this.sides.left, ...this.sides.right];
+
+    this.units.forEach(u => this.setupUnit(u));
+    this.emit('battleStart', { battle: this });
+  }
+
+  buildSide(side, slots){
+    return slots.map((slot, idx) => {
+      const hero = getHero(slot.id);
+      if(!hero) return null;
+      return {
+        id: hero.id,
+        name: hero.name,
+        side,
+        slotIndex: idx,
+        positionLabel: POSITIONS[idx] || `Slot${idx+1}`,
+        initialTroops: num(slot.troops, 10000),
+        currentTroops: num(slot.troops, 10000),
+        atk: hero.atk, def: hero.def, int: hero.int, agi: hero.agi, rng: hero.rng,
+        uniqueSkillId: hero.unique,
+        subSkillIds: Array.isArray(slot.subSkills) ? slot.subSkills.slice(0,2) : [],
+        statuses: [],
+        buffs: [],
+        shields: 0,
+        ambush: 0,
+        normalHits: hero.id === 'george' ? 2 : 1,
+        countersThisTurn: 0,
+        prepared: {},
+        activeChanceBonusPct: 0,
+        activeDamageBonusPct: 0,
+        damageDealPct: 0,
+        damageTakenPct: 0,
+        critChanceBonusPct: 0,
+        evadeChanceBonusPct: 0,
+        ignoreEvasion: false,
+        lifestealPct: 0,
+        invincibleTurns: 0,
+        markStacks: 0,
+        commandBuffTurns: 0,
+        rainbowTurns: 0
+      };
+    }).filter(Boolean);
+  }
+
+  emit(name, payload){
+    (this.listeners[name] || []).forEach(fn => {
+      try { fn(payload); } catch(err){ this.log(`【デバッグ】${name} エラー: ${err.message}`); console.error(err); }
+    });
+  }
+  on(name, fn){
+    if(!this.listeners[name]) this.listeners[name] = [];
+    this.listeners[name].push(fn);
+  }
+  log(msg){
+    if(!this.logsByTurn[this.viewTurn]) this.logsByTurn[this.viewTurn] = [];
+    this.logsByTurn[this.viewTurn].push(msg);
+  }
+
+  setupUnit(unit){
+    const unique = getSkill(unit.uniqueSkillId);
+    const subSkills = unit.subSkillIds.map(id => getSkill(id)).filter(Boolean);
+    unit.uniqueSkill = unique;
+    unit.subSkills = subSkills;
+
+    const all = [unique, ...subSkills].filter(Boolean);
+    all.forEach(skill => this.registerSkillBehavior(unit, skill));
+
+    // passive-like heroes without skills
+    if(unit.id === 'george'){
+      unit.normalHits = 2;
+    }
+  }
+
+  registerSkillBehavior(unit, skill){
+    const b = this;
+    switch(skill.behavior){
+      case 'vampire':
+        unit.lifestealPct += 0.20;
+        break;
+      case 'sniper':
+        unit.ignoreEvasion = true;
+        unit.critChanceBonusPct += 0.25;
+        break;
+      case 'finalBattle':
+        unit.activeChanceBonusPct += 0.12;
+        b.on('skillAttempt', ({ caster, skill: s }) => {
+          if(caster !== unit) return;
+          if(!s || s.category !== 'active') return;
+          unit.activeDamageBonusPct = Math.min(30, unit.activeDamageBonusPct + 6);
+          b.log(`${unit.name}：最終決戦 - アクティブ威力+6%`);
+        });
+        break;
+      case 'gatherPower':
+        b.on('actionStart', ({ actor }) => {
+          if(actor !== unit || !isAlive(unit)) return;
+          const heal = healAmount(unit, unit, 1.50, 'def');
+          if(heal > 0) applyHeal(b, unit, unit, heal, '機を蓄える');
+          addBuff(unit, { stat:'def', value: Math.round(getStat(unit,'def')*0.10), duration:1, source:'機を蓄える' });
+          b.log(`${unit.name}：機を蓄える`);
+        });
+        break;
+      case 'artilleryKing':
+        unit.normalHits = 2;
+        b.on('normalAttack', ({ attacker, kind }) => {
+          if(kind !== 'normal') return;
+          if(!sameTeam(attacker, unit)) return;
+          if(!isAlive(unit)) return;
+          if(rand() < 0.45){
+            unit.ambush = Math.min(10, unit.ambush + 1);
+            b.log(`${unit.name}：鉄砲王 - 奇襲+1 (${unit.ambush})`);
+          }
+        });
+        break;
+      case 'palmeraResistance':
+        b.on('afterDamage', ({ attacker, target, damage }) => {
+          if(target !== unit || damage <= 0) return;
+          if(unit.countersThisTurn >= 2) return;
+          const high = Math.max(getStat(unit,'def'), getStat(unit,'int'));
+          const chance = Math.min(0.95, 0.24 + Math.floor(high/50)*0.01);
+          if(rand() < chance){
+            unit.countersThisTurn += 1;
+            const dmg = skillDamage(unit, attacker, 1.40, 'int');
+            applyDamage(b, unit, attacker, dmg, 'パルメラの抵抗');
+            const st = rand() < 0.5 ? 'stun' : 'disarm';
+            applyControl(b, unit, attacker, st, 1, 'パルメラの抵抗');
+            b.log(`${unit.name}：パルメラの抵抗 反撃`);
+          }
+        });
+        b.on('turnStart', () => unit.countersThisTurn = 0);
+        break;
+      case 'freedomProclamation':
+        b.on('skillAttempt', ({ caster, skill: s }) => {
+          if(!s || s.category !== 'active') return;
+          if(!sameTeam(caster, unit)) return;
+          if(!isAlive(unit)) return;
+          if(hasStatus(caster, 'stun') || hasStatus(caster, 'silence')) return;
+          if(rand() < 0.70){
+            const enemy = randomEnemy(unit);
+            if(enemy){
+              const dmg = skillDamage(unit, enemy, 1.60, 'int');
+              applyDamage(b, unit, enemy, dmg, '自由の宣言');
+              b.log(`${unit.name}：自由の宣言 追加射撃`);
+            }
+          }
+        });
+        b.on('skillSuccess', ({ caster, skill: s }) => {
+          if(!s || s.category !== 'active') return;
+          if(!sameTeam(caster, unit)) return;
+          const wounded = mostWoundedAlly(unit);
+          if(wounded){
+            const heal = healAmount(unit, wounded, 0.80, 'int');
+            applyHeal(b, unit, wounded, heal, '自由の宣言');
+          }
+        });
+        b.on('afterDamage', ({ target }) => {
+          if(!sameTeam(target, unit)) return;
+          const threshold = Math.floor(num(target.initialTroops) * 0.70);
+          if(!unit._freedomTriggered && num(target.currentTroops) < threshold){
+            unit._freedomTriggered = true;
+            const enemy = randomEnemy(unit);
+            if(enemy){
+              const dmg = skillDamage(unit, enemy, 1.60, 'int');
+              applyDamage(b, unit, enemy, dmg, '自由の宣言');
+              b.log(`${unit.name}：自由の宣言 追加発動`);
+            }
+          }
+        });
+        break;
+      case 'mongolExpansion':
+        b.on('battleStart', () => {
+          const c = commander(unit.side);
+          if(!c) return;
+          addBuff(c, { stat:'damageDealPct', value:30, duration:3, source:'モンゴルの拡張' });
+          addBuff(c, { stat:'damageTakenPct', value:-30, duration:3, source:'モンゴルの拡張' });
+          b.log(`${unit.name}：モンゴルの拡張`);
+        });
+        b.on('turnEnd', () => {
+          const c = commander(unit.side);
+          if(c && rand() < 0.70) removeDebuffs(c, b, 'モンゴルの拡張');
+        });
+        break;
+      case 'redEyeGaze':
+        b.on('turnStart', () => {
+          if(!isAlive(unit)) return;
+          enemiesOf(unit).forEach(e => {
+            addBuff(e, { stat:'atk', value:-10, duration:9999, source:'赤眼の眼光' });
+            addBuff(e, { stat:'int', value:-10, duration:9999, source:'赤眼の眼光' });
+          });
+          addBuff(unit, { stat:'atk', value:20, duration:9999, source:'赤眼の眼光' });
+          addBuff(unit, { stat:'int', value:20, duration:9999, source:'赤眼の眼光' });
+          addBuff(unit, { stat:'def', value:20, duration:9999, source:'赤眼の眼光' });
+          b.log(`${unit.name}：赤眼の眼光`);
+        });
+        break;
+      case 'phantomArt':
+        b.on('battleStart', () => {
+          alliesOf(unit).forEach(a => {
+            a.shields += Math.round(num(a.initialTroops) * 0.20);
+          });
+          b.log(`${unit.name}：幻影の芸術 - シールド`);
+        });
+        b.on('controlAttempt', ({ source, target, status, payload }) => {
+          if(target !== unit) return;
+          if(!isAlive(unit) || unit.shields <= 0) return;
+          if(!CONTROL_SET.has(status)) return;
+          if(rand() < 0.45){
+            payload.cancelled = true;
+            b.log(`${unit.name}：幻影の芸術 - 制御無効`);
+            if(source && rand() < 0.50){
+              const dmg = skillDamage(unit, source, 1.00, 'int');
+              applyDamage(b, unit, source, dmg, '幻影の芸術');
+              if(rand() < 0.25){
+                addStatus(source, { type:'confusion', duration:1, source:'幻影の芸術' });
+                b.log(`${source.name} は混乱`);
+              }
+            }
+          }
+        });
+        break;
+      case 'rockHammer':
+        unit.prepared.rock = 0;
+        break;
+      case 'justiceHeart':
+        b.on('battleStart', () => {
+          unit.invincibleTurns = 4;
+          b.log(`${unit.name}：正義の心 - 無敵4ターン`);
+        });
+        b.on('skillSuccess', ({ caster, skill: s }) => {
+          if(caster !== unit) return;
+          if(!s || s.category !== 'active') return;
+          unit.markStacks = Math.min(99, unit.markStacks + 1);
+          unit._combatMul = Math.pow(1.25, unit.markStacks);
+          unit.activeDamageBonusPct += 3;
+          b.log(`${unit.name}：正義の心 - スタック${unit.markStacks}`);
+        });
+        unit.activeChanceBonusPct += 15;
+        break;
+      case 'berserker':
+        b.on('turnStart', () => {
+          if(!isAlive(unit)) return;
+          unit.rng = Math.max(1, num(unit.rng) - 2);
+          b.log(`${unit.name}：狂気のバーサーカー RNG=${unit.rng}`);
+        });
+        b.on('turnEnd', () => {
+          if(!isAlive(unit) || b.turn < 3) return;
+          const enemy = randomEnemy(unit);
+          if(enemy){
+            const dmg = skillDamage(unit, enemy, 1.50, 'atk');
+            applyDamage(b, unit, enemy, dmg, '狂気のバーサーカー');
+          }
+        });
+        break;
+      case 'allHeal':
+        b.on('turnStart', () => {
+          if(!isAlive(unit)) return;
+          if(rand() < 0.40){
+            alliesOf(unit).forEach(a => {
+              const heal = healAmount(unit, a, 1.50, 'int');
+              applyHeal(b, unit, a, heal, '全面治癒');
+            });
+            b.log(`${unit.name}：全面治癒`);
+          }
+        });
+        break;
+      case 'ironGuard':
+        b.on('battleStart', () => {
+          sample(alliesOf(unit), 2).forEach(a => {
+            addBuff(a, { stat:'damageTakenPct', value:-30, duration:2, source:'鉄壁の守護' });
+          });
+          b.log(`${unit.name}：鉄壁の守護`);
+        });
+        break;
+      case 'rainbow':
+        b.on('battleStart', () => {
+          alliesOf(unit).forEach(a => a.shields += Math.round(num(a.initialTroops) * 0.20));
+          b.log(`${unit.name}：虹の景色 - シールド`);
+        });
+        b.on('turnStart', () => {
+          if(!isAlive(unit)) return;
+          if(b.turn <= 2){
+            const enemy = randomEnemy(unit);
+            if(enemy) applyControl(b, unit, enemy, 'silence', 1, '虹の景色');
+          }
+          if(b.turn >= 4){
+            addBuff(unit, { stat:'pierce', value:1, duration:9999, source:'虹の景色' });
+            const heal = healAmount(unit, unit, 2.00, 'int');
+            applyHeal(b, unit, unit, heal, '虹の景色');
+          }
+        });
+        break;
+      case 'flowBlazeDance':
+      case 'stillnessPrayer':
+      case 'repairDefense':
+      case 'budo':
+      case 'sagePlot':
+      case 'eloquence':
+      case 'purge':
+      case 'zangeki':
+      case 'nenrikiHeal':
+      case 'dragonRoar':
+        break;
+      default:
+        break;
+    }
+  }
+
+  nextChunk(){
+    if(this.finished) return;
+    try{
+      if(this.phase === 'opening'){
+        this.turn = 0;
+        this.viewTurn = 0;
+        this.logsByTurn[0] = [];
+        this.log(`=== 戦闘開始 ===`);
+        this.log(`自軍: ${this.sides.left.map(u => `${u.name}(${u.currentTroops})`).join(' / ')}`);
+        this.log(`敵軍: ${this.sides.right.map(u => `${u.name}(${u.currentTroops})`).join(' / ')}`);
+        this.phase = 'turnStart';
+        return;
+      }
+
+      if(this.phase === 'turnStart'){
+        this.turn += 1;
+        this.viewTurn = this.turn;
+        this.logsByTurn[this.turn] = [];
+        this.log(`--- Turn ${this.turn} 開始 ---`);
+
+        this.units.forEach(u => {
+          u.countersThisTurn = 0;
+          if(u.invincibleTurns > 0) u.invincibleTurns -= 1;
+          tickStatuses(u);
+          tickBuffs(u);
+        });
+
+        this.emit('turnStart', { battle:this, turn:this.turn });
+        this.turnOrder = this.units.filter(isAlive).slice().sort((a,b) => {
+          const d = getStat(b,'agi') - getStat(a,'agi');
+          if(d !== 0) return d;
+          return rand() - 0.5;
+        });
+        this.turnIndex = 0;
+        this.phase = 'action';
+        return;
+      }
+
+      if(this.phase === 'action'){
+        if(this.turnIndex >= this.turnOrder.length){
+          this.phase = 'turnEnd';
+          return;
+        }
+        const actor = this.turnOrder[this.turnIndex++];
+        if(isAlive(actor)) this.act(actor);
+        this.resolveDeaths();
+        if(this.finished) return;
+        if(this.turnIndex >= this.turnOrder.length) this.phase = 'turnEnd';
+        return;
+      }
+
+      if(this.phase === 'turnEnd'){
+        this.emit('turnEnd', { battle:this, turn:this.turn });
+        this.resolveDeaths();
+        if(this.finished) return;
+        if(this.turn >= 8){
+          this.finish('turn_limit');
+          return;
+        }
+        this.phase = 'turnStart';
+        return;
+      }
+    }catch(err){
+      console.error(err);
+      this.log(`【クラッシュ防止】${err.message}`);
+      this.finish('error');
+    }
+  }
+
+  act(actor){
+    this.emit('actionStart', { battle:this, actor });
+    this.log(`【${actor.side === 'left' ? '自軍' : '敵軍'} ${actor.positionLabel}】${actor.name} 行動開始 / HP:${actor.currentTroops} / 負傷:${Math.max(0, actor.initialTroops - actor.currentTroops)}`);
+
+    if(hasStatus(actor, 'stun')){
+      this.log(`${actor.name} は眩暈で行動不能`);
+      return;
+    }
+
+    if(actor.prepared && actor.prepared.rock > 0){
+      actor.prepared.rock = 0;
+      this.resolveActiveSkill(actor, getSkill('rock_hammer'));
+      return;
+    }
+
+    const actSkills = [actor.uniqueSkill, ...(actor.subSkills || [])].filter(Boolean).filter(s => s.category === 'active');
+    for(const skill of actSkills){
+      this.tryActiveSkill(actor, skill);
+      if(this.finished) return;
+    }
+
+    if(hasStatus(actor, 'disarm')){
+      this.log(`${actor.name} は武装解除で通常攻撃できない`);
+      return;
+    }
+
+    this.normalAttackSequence(actor);
+  }
+
+  tryActiveSkill(caster, skill){
+    if(!isAlive(caster)) return false;
+    if(hasStatus(caster, 'silence')){
+      this.log(`${caster.name} は沈黙で ${skill.name} を発動できない`);
+      return false;
+    }
+    this.emit('skillAttempt', { battle:this, caster, skill });
+    const chance = Math.min(0.99, Math.max(0, (num(skill.chance, 100) + num(caster.activeChanceBonusPct, 0)) / 100));
+    if(rand() > chance){
+      this.log(`${caster.name} の ${skill.name} は不発`);
+      return false;
+    }
+    this.emit('skillSuccess', { battle:this, caster, skill });
+    this.log(`${caster.name} の ${skill.name} 発動`);
+    this.resolveActiveSkill(caster, skill);
+    return true;
+  }
+
+  resolveActiveSkill(caster, skill){
+    const b = this;
+    if(!skill) return;
+
+    switch(skill.behavior){
+      case 'repairDefense': return skillRepairDefense(b, caster, skill);
+      case 'budo': return skillBudo(b, caster, skill);
+      case 'sagePlot': return skillSagePlot(b, caster, skill);
+      case 'eloquence': return skillEloquence(b, caster, skill);
+      case 'purge': return skillPurge(b, caster, skill);
+      case 'zangeki': return skillZangeki(b, caster, skill);
+      case 'nenrikiHeal': return skillNenrikiHeal(b, caster, skill);
+      case 'dragonRoar': return skillDragonRoar(b, caster, skill);
+      case 'rockHammer': return skillRockHammer(b, caster, skill);
+      case 'flowBlazeDance': return skillFlowBlazeDance(b, caster, skill);
+      case 'stillnessPrayer': return skillStillnessPrayer(b, caster, skill);
+      default: return;
+    }
+  }
+
+  normalAttackSequence(attacker){
+    const baseHits = Math.max(1, num(attacker.normalHits, 1));
+    let hits = baseHits;
+    while(hits-- > 0 && isAlive(attacker)){
+      const target = this.chooseNormalTarget(attacker);
+      if(!target){
+        this.log(`${attacker.name} は攻撃対象を見つけられない`);
+        break;
+      }
+      const dmg = calcNormalDamage(attacker, target);
+      applyDamage(this, attacker, target, dmg, '通常攻撃');
+      this.emit('normalAttack', { battle:this, attacker, target, kind:'normal', damage:dmg });
+
+      // combo skills only after normal attack
+      this.resolveComboSkills(attacker, target);
+      this.resolveDeaths();
+      if(this.finished) return;
+    }
+
+    // George: ambush as additional normal attacks, 1 per attack consumed
+    while(isAlive(attacker) && num(attacker.ambush,0) > 0){
+      attacker.ambush -= 1;
+      this.log(`${attacker.name}：奇襲消費（残り${attacker.ambush}）`);
+      const target = this.chooseNormalTarget(attacker);
+      if(!target) break;
+      const dmg = calcNormalDamage(attacker, target);
+      applyDamage(this, attacker, target, dmg, '奇襲通常攻撃');
+      this.emit('normalAttack', { battle:this, attacker, target, kind:'normal', damage:dmg });
+      this.resolveComboSkills(attacker, target);
+      this.resolveDeaths();
+      if(this.finished) return;
+    }
+  }
+
+  resolveComboSkills(attacker, target){
+    const combos = (attacker.subSkills || []).filter(s => s && s.category === 'combo');
+    for(const skill of combos){
+      if(!isAlive(attacker) || !isAlive(target)) continue;
+      if(rand() > (num(skill.chance,0)/100)) continue;
+      this.log(`${attacker.name} コンボ ${skill.name}`);
+      this.executeComboSkill(attacker, skill, target);
+    }
+  }
+
+  executeComboSkill(caster, skill, target){
+    switch(skill.behavior){
+      case 'followShot': return skillFollowShot(this, caster, target, skill);
+      case 'supply': return skillSupply(this, caster, target, skill);
+      default: return;
+    }
+  }
+
+  chooseNormalTarget(attacker){
+    const enemies = enemiesOf(attacker).filter(t => isAlive(t) && inRange(attacker, t, num(attacker.rng,1)));
+    const confusedPool = this.units.filter(u => isAlive(u) && u !== attacker && inRange(attacker, u, num(attacker.rng,1)));
+    const frenzyPool = this.units.filter(u => isAlive(u) && inRange(attacker, u, num(attacker.rng,1)));
+
+    if(hasStatus(attacker, 'confusion')){
+      return pick(confusedPool) || pick(enemies);
+    }
+    if(hasStatus(attacker, 'frenzy')){
+      return pick(frenzyPool) || pick(enemies);
+    }
+
+    const taunted = enemies.find(e => hasStatus(e, 'taunt') && e.tauntSourceSide === attacker.side);
+    if(taunted) return taunted;
+    return pick(enemies);
+  }
+
+  resolveDeaths(){
+    this.units.forEach(u => {
+      if(!u._deadLogged && num(u.currentTroops) <= 0){
+        u._deadLogged = true;
+        this.emit('death', { battle:this, unit:u });
+        this.log(`${u.name} は撤退`);
+      }
+    });
+
+    const leftCommander = this.sides.left[0];
+    const rightCommander = this.sides.right[0];
+    const leftDead = !isAlive(leftCommander);
+    const rightDead = !isAlive(rightCommander);
+
+    if(leftDead && rightDead){ this.finish('draw'); return; }
+    if(leftDead){ this.finish('right_win'); return; }
+    if(rightDead){ this.finish('left_win'); return; }
+  }
+
+  finish(reason){
+    if(this.finished) return;
+    this.finished = true;
+    this.phase = 'finished';
+    if(reason === 'draw') this.log('同時に両軍指揮官が死亡：引き分け');
+    else if(reason === 'turn_limit') this.log('8ターン終了：引き分け');
+    else if(reason === 'left_win') this.log('自軍の勝利！');
+    else if(reason === 'right_win') this.log('敵軍の勝利！');
+    else this.log('戦闘終了');
+    this.logSummary();
+  }
+
+  logSummary(){
+    ['left','right'].forEach(side => {
+      this.log(`--- ${side === 'left' ? '自軍' : '敵軍'} 残存状況 ---`);
+      this.sides[side].forEach(u => {
+        this.log(`${u.name} / 残存:${Math.max(0,u.currentTroops)} / 負傷:${Math.max(0,u.initialTroops-u.currentTroops)} / シールド:${Math.max(0,u.shields)}`);
+      });
+    });
+  }
+}
+
+// -------- helpers --------
+function commander(side){
+  if(!app.battle) return null;
+  return app.battle.sides[side] && app.battle.sides[side][0] || null;
+}
+function alliesOf(unit){
+  return app.battle ? app.battle.units.filter(u => u.side === unit.side && isAlive(u)) : [];
+}
+function enemiesOf(unit){
+  return app.battle ? app.battle.units.filter(u => u.side !== unit.side && isAlive(u)) : [];
+}
+function getStat(unit, key){
+  const base = num(unit[key], 0);
+  const flat = (unit.buffs || []).filter(b => b.stat === key && b.type === 'flat').reduce((a,b)=>a+num(b.value,0),0);
+  const pct = (unit.buffs || []).filter(b => b.stat === key && b.type === 'pct').reduce((a,b)=>a+num(b.value,0),0);
+  let value = (base + flat) * (1 + pct/100);
+  if(unit.markStacks && ['atk','def','int','agi'].includes(key)){
+    value *= Math.pow(1.25, unit.markStacks);
+  }
+  return Math.round(value);
+}
+function addBuff(unit, buff){
+  unit.buffs = unit.buffs || [];
+  unit.buffs.push({ type: buff.type || 'flat', stat: buff.stat, value: num(buff.value,0), duration: num(buff.duration,1), source: buff.source || '' });
+}
+function tickBuffs(unit){
+  unit.buffs = (unit.buffs || []).filter(b => {
+    if(b.duration === 9999) return true;
+    b.duration -= 1;
+    return b.duration > 0;
+  });
+}
+function addStatus(target, st){
+  target.statuses = target.statuses || [];
+  target.statuses.push({ type: st.type, duration: num(st.duration,1), source: st.source || '' });
+}
+function hasStatus(unit, type){
+  return (unit.statuses || []).some(s => s.type === type && s.duration > 0);
+}
+function tickStatuses(unit){
+  unit.statuses = (unit.statuses || []).filter(s => {
+    if(s.duration === 9999) return true;
+    s.duration -= 1;
+    return s.duration > 0;
+  });
+}
+function removeDebuffs(unit, battle, source){
+  const before = (unit.statuses || []).length;
+  unit.statuses = (unit.statuses || []).filter(s => !CONTROL_SET.has(s.type) && !DEBUFF_SET.has(s.type));
+  if(before !== unit.statuses.length){
+    battle.log(`${unit.name} の戦闘時デバフを解除${source ? ` (${source})` : ''}`);
+  }
+}
+function healAmount(healer, target, rate, baseStatKey){
+  const stat = num(healer[baseStatKey], 0);
+  const scale = statScale(stat);
+  const troops = Math.max(1, num(healer.currentTroops,1));
+  const raw = (145 * Math.log(troops) - 900) * rate;
+  return Math.max(0, Math.round(raw * scale));
+}
+function applyHeal(battle, source, target, amount, label){
+  if(!target || !isAlive(target)) return 0;
+  if(hasStatus(target, 'noheal')){ battle.log(`${target.name} は回復無効`); return 0; }
+  const before = target.currentTroops;
+  target.currentTroops = Math.min(target.initialTroops, target.currentTroops + Math.max(0, amount));
+  const healed = target.currentTroops - before;
+  if(healed > 0) battle.log(`${target.name} 回復 ${healed}${label ? ` (${label})` : ''}`);
+  return healed;
+}
+function controlAttempt(battle, source, target, status, duration, label){
+  const payload = { battle, source, target, status, duration, label, cancelled: false };
+  battle.emit('controlAttempt', { ...payload, payload });
+  if(payload.cancelled) return false;
+  addStatus(target, { type: status, duration, source: label || '' });
+  if(status === 'taunt') target.tauntSourceSide = source.side;
+  battle.log(`${target.name} に ${status} 付与`);
+  return true;
+}
+function skillDamage(caster, target, power, damageType){
+  const att = damageType === 'int' ? getStat(caster, 'int') : getStat(caster, 'atk');
+  const def = damageType === 'int' ? getStat(target, 'int') : getStat(target, 'def');
+  const base = ((att - def) * 1.5) + ((-0.05/10000) * num(caster.currentTroops) + 0.1) * num(caster.currentTroops);
+  let dmg = base * power * randRange(0.975, 1.025);
+  dmg *= (1 + num(caster.damageDealPct,0)/100 + num(caster.activeDamageBonusPct,0)/100);
+  return Math.max(1, Math.round(dmg));
+}
+function normalDamage(attacker, target){
+  const att = getStat(attacker, 'atk');
+  const def = getStat(target, 'def');
+  const base = ((att - def) * 1.5) + ((-0.05/10000) * num(attacker.currentTroops) + 0.1) * num(attacker.currentTroops);
+  let dmg = base * randRange(0.975, 1.025);
+  dmg *= (1 + num(attacker.damageDealPct,0)/100);
+  if(rand() < (num(attacker.critChanceBonusPct,0)/100)) dmg *= 2;
+  return Math.max(1, Math.round(dmg));
+}
+function randRange(min,max){ return min + Math.random()*(max-min); }
+function applyDamage(battle, attacker, target, damage, label){
+  if(!attacker || !target || !isAlive(attacker) || !isAlive(target)) return 0;
+  battle.emit('beforeDamage', { battle, attacker, target, damage, label });
+
+  let dmg = Math.max(0, num(damage,0));
+  if(!attacker.ignoreEvasion && Math.random() < Math.min(0.95, Math.max(0, num(target.evadeChanceBonusPct,0)/100))){
+    battle.log(`${target.name} は回避`);
+    battle.emit('afterDamage', { battle, attacker, target, damage:0, label });
+    return 0;
+  }
+
+  if(target.invincibleTurns > 0){
+    battle.log(`${target.name} は無敵中`);
+  }
+
+  dmg = Math.round(dmg * Math.max(0, 1 + num(target.damageTakenPct,0)/100));
+
+  if(target.shields > 0){
+    const absorb = Math.min(target.shields, dmg);
+    target.shields -= absorb;
+    dmg -= absorb;
+    battle.log(`${target.name} のシールドが ${absorb} 吸収`);
+  }
+
+  if(dmg > 0){
+    target.currentTroops = Math.max(0, target.currentTroops - dmg);
+    battle.log(`${attacker.name} → ${target.name} に ${dmg} ダメージ${label ? ` (${label})` : ''}`);
+  }
+
+  battle.emit('afterDamage', { battle, attacker, target, damage:dmg, label });
+
+  if(num(attacker.lifestealPct,0) > 0 && dmg > 0){
+    applyHeal(battle, attacker, attacker, Math.round(dmg * num(attacker.lifestealPct,0)), '吸血');
+  }
+  return dmg;
+}
+function getTargetsByMode(unit, mode, count=1){
+  const enemies = enemiesOf(unit).filter(isAlive);
+  const allies = alliesOf(unit).filter(isAlive);
+  switch(mode){
+    case 'self': return [unit];
+    case 'enemy': return [pick(enemies)].filter(Boolean);
+    case 'ally': return [pick(allies)].filter(Boolean);
+    case 'allEnemies': return enemies;
+    case 'allAllies': return allies;
+    case 'random2': return sample(enemies, 2);
+    case 'random3': return sample(enemies, 3);
+    case 'randomAllies2': return sample(allies, 2);
+    case 'randomAllies3': return sample(allies, 3);
+    default: return [pick(enemies)].filter(Boolean);
+  }
+}
+
+// -------- skill behaviors --------
+function executeSkill(battle, caster, skill){
+  if(!skill) return false;
+  if(hasStatus(caster, 'stun')) return false;
+  if(hasStatus(caster, 'silence')){ battle.log(`${caster.name} は沈黙で ${skill.name} を発動できない`); return false; }
+
+  battle.emit('skillAttempt', { battle, caster, skill });
+
+  const chance = Math.min(0.99, Math.max(0, (num(skill.chance,100) + num(caster.activeChanceBonusPct,0)) / 100));
+  if(Math.random() > chance){
+    battle.log(`${caster.name} の ${skill.name} は不発`);
+    return false;
+  }
+
+  battle.emit('skillSuccess', { battle, caster, skill });
+  battle.log(`${caster.name} の ${skill.name} 発動`);
+
+  switch(skill.behavior){
+    case 'repairDefense': {
+      const targets = [caster, lowestHpAlly(caster)].filter(Boolean).slice(0,2);
+      targets.forEach(t => applyHeal(battle, caster, t, healAmount(caster, t, 2.50, 'def'), '修復防御'));
+      addBuff(caster, { stat:'def', value:20, duration:3, source:'修復防御' });
+      break;
+    }
+    case 'budo': {
+      sample(enemiesOf(caster).filter(isAlive), 2).forEach(t => {
+        applyDamage(battle, caster, t, skillDamage(caster,t,1.80,'int'), '文武両道');
+        addBuff(t, { stat:'damageDealPct', value:-12, duration:2, source:'文武両道' });
+      });
+      break;
+    }
+    case 'sagePlot': {
+      sample(enemiesOf(caster).filter(isAlive), 2).forEach(t => {
+        controlAttempt(battle, caster, t, 'noheal', 1, '賢者の謀');
+        applyDamage(battle, caster, t, skillDamage(caster,t,1.60,'int'), '賢者の謀');
+      });
+      break;
+    }
+    case 'eloquence': {
+      addBuff(caster, { stat:'evadeChancePct', value:25, duration:2, source:'巧みな弁舌' });
+      sample(enemiesOf(caster).filter(isAlive), 2).forEach(t => {
+        controlAttempt(battle, caster, t, 'taunt', 2, '巧みな弁舌');
+        addBuff(t, { stat:'atk', value:-30, duration:2, source:'巧みな弁舌' });
+      });
+      break;
+    }
+    case 'purge': {
+      sample(alliesOf(caster), 3).forEach(t => {
+        removeDebuffs(t, battle, '祓いの加護');
+        addBuff(t, { stat:'atk', value:50, duration:2, source:'祓いの加護' });
+        addBuff(t, { stat:'int', value:50, duration:2, source:'祓いの加護' });
+      });
+      break;
+    }
+    case 'zangeki': {
+      const target = pick(enemiesOf(caster).filter(isAlive));
+      if(target){
+        for(let i=0;i<2;i++) applyDamage(battle, caster, target, skillDamage(caster,target,0.75,'atk'), '斬撃');
+      }
+      break;
+    }
+    case 'nenrikiHeal': {
+      sample(alliesOf(caster), 2).forEach(t => {
+        applyHeal(battle, caster, t, healAmount(caster, t, 1.20, 'int'), '念力の治癒');
+        const removed = removeOneControl(t);
+        if(removed) battle.log(`${t.name} の制御効果を1つ解除`);
+      });
+      break;
+    }
+    case 'dragonRoar': {
+      const allies = alliesOf(caster).filter(a => a !== caster);
+      const ally = pick(allies);
+      addBuff(caster, { stat:'damageDealPct', value:10, duration:1, source:'龍の咆哮' });
+      if(ally) addBuff(ally, { stat:'damageDealPct', value:10, duration:1, source:'龍の咆哮' });
+      enemiesOf(caster).filter(isAlive).forEach(t => applyDamage(battle, caster, t, skillDamage(caster,t,1.20,'int'), '龍の咆哮'));
+      break;
+    }
+    case 'flowBlazeDance': {
+      sample(enemiesOf(caster).filter(isAlive), 2).forEach(t => {
+        applyDamage(battle, caster, t, skillDamage(caster,t,1.50,'int'), '流焔乱舞');
+        addStatus(t, { type:'burn', duration:2, source:'流焔乱舞' });
+      });
+      break;
+    }
+    case 'stillnessPrayer': {
+      sample(enemiesOf(caster).filter(isAlive), 2).forEach(t => {
+        controlAttempt(battle, caster, t, 'silence', 1, '静止の祈り');
+        controlAttempt(battle, caster, t, 'stun', 1, '静止の祈り');
+      });
+      applyHeal(battle, caster, caster, healAmount(caster, caster, 1.00, 'int'), '静止の祈り');
+      break;
+    }
+    case 'rockHammer': {
+      if(!caster.prepared.rock){
+        caster.prepared.rock = 1;
+        battle.log(`${caster.name}：岩壁の鉄槌 準備`);
+        return true;
+      }
+      caster.prepared.rock = 0;
+      enemiesOf(caster).filter(isAlive).forEach(t => applyDamage(battle, caster, t, skillDamage(caster,t,3.00,'atk'), '岩壁の鉄槌'));
+      break;
+    }
+    default:
+      break;
+  }
+  return true;
+}
+
+function executeCombo(battle, caster, skill, target){
+  if(!skill || !target) return;
+  switch(skill.behavior){
+    case 'followShot':
+      for(let i=0;i<2;i++) applyDamage(battle, caster, target, skillDamage(caster,target,1.10,'int'), '追撃の銃弾');
+      break;
+    case 'supply':
+      applyDamage(battle, caster, target, skillDamage(caster,target,0.70,'int'), '継戦補給');
+      sample(alliesOf(caster), 2).forEach(t => applyHeal(battle, caster, t, healAmount(caster, t, 1.20, 'int'), '継戦補給'));
+      break;
+    default:
+      break;
+  }
+}
+
+function lowestHpAlly(unit){
+  return alliesOf(unit).slice().sort((a,b) => num(a.currentTroops) - num(b.currentTroops))[0] || null;
+}
+function mostWoundedAlly(unit){
+  return alliesOf(unit).slice().sort((a,b) => (num(b.initialTroops)-num(b.currentTroops)) - (num(a.initialTroops)-num(a.currentTroops)))[0] || null;
+}
+
+// -------- special hero event setup --------
+function setupBattleScripts(battle){
+  battle.on('turnStart', () => {
+    battle.units.forEach(u => { u.countersThisTurn = 0; if(u.invincibleTurns > 0) u.invincibleTurns -= 1; });
+  });
+
+  battle.on('actionStart', ({ actor }) => {
+    if(actor.uniqueSkill && actor.uniqueSkill.behavior === 'gatherPower') {
+      // handled via passive-like function below
+    }
+  });
+
+  // Zenobia
+  const zenobia = battle.units.find(u => u.id === 'zenobia');
+  if(zenobia){
+    battle.on('afterDamage', ({ attacker, target, damage }) => {
+      if(target !== zenobia || damage <= 0) return;
+      if(zenobia.countersThisTurn >= 2) return;
+      const high = Math.max(getStat(zenobia,'def'), getStat(zenobia,'int'));
+      const chance = Math.min(0.95, 0.24 + Math.floor(high/50)*0.01);
+      if(Math.random() < chance){
+        zenobia.countersThisTurn += 1;
+        applyDamage(battle, zenobia, attacker, skillDamage(zenobia, attacker, 1.40, 'int'), 'パルメラの抵抗');
+        const st = Math.random() < 0.5 ? 'stun' : 'disarm';
+        controlAttempt(battle, zenobia, attacker, st, 1, 'パルメラの抵抗');
+      }
+    });
+  }
+
+  // Lincoln
+  const lincoln = battle.units.find(u => u.id === 'lincoln');
+  if(lincoln){
+    lincoln._freedomTriggered = false;
+    battle.on('skillAttempt', ({ caster, skill }) => {
+      if(!skill || skill.category !== 'active') return;
+      if(!sameTeam(caster, lincoln)) return;
+      if(!isAlive(lincoln)) return;
+      if(Math.random() < 0.70){
+        const e = pick(enemiesOf(lincoln).filter(isAlive));
+        if(e) applyDamage(battle, lincoln, e, skillDamage(lincoln,e,1.60,'int'), '自由の宣言');
+      }
+    });
+    battle.on('skillSuccess', ({ caster, skill }) => {
+      if(!skill || skill.category !== 'active') return;
+      if(!sameTeam(caster, lincoln)) return;
+      const wounded = mostWoundedAlly(lincoln);
+      if(wounded) applyHeal(battle, lincoln, wounded, healAmount(lincoln, wounded, 0.80, 'int'), '自由の宣言');
+    });
+    battle.on('afterDamage', ({ target }) => {
+      if(!sameTeam(target, lincoln)) return;
+      const threshold = Math.floor(num(target.initialTroops) * 0.70);
+      if(!lincoln._freedomTriggered && num(target.currentTroops) < threshold){
+        lincoln._freedomTriggered = true;
+        const e = pick(enemiesOf(lincoln).filter(isAlive));
+        if(e) applyDamage(battle, lincoln, e, skillDamage(lincoln,e,1.60,'int'), '自由の宣言(追加)');
+      }
+    });
+  }
+
+  // Kublai
+  const kublai = battle.units.find(u => u.id === 'kublai');
+  if(kublai){
+    battle.on('battleStart', () => {
+      const c = commander(kublai.side);
+      if(!c) return;
+      addBuff(c, { stat:'damageDealPct', value:30, duration:3, source:'モンゴルの拡張' });
+      addBuff(c, { stat:'damageTakenPct', value:-30, duration:3, source:'モンゴルの拡張' });
+    });
+    battle.on('turnEnd', () => {
+      const c = commander(kublai.side);
+      if(c && Math.random() < 0.70) removeDebuffs(c, battle, 'モンゴルの拡張');
+    });
+  }
+
+  // Rin
+  const rin = battle.units.find(u => u.id === 'lin');
+  if(rin){
+    battle.on('turnStart', () => {
+      if(!isAlive(rin)) return;
+      enemiesOf(rin).forEach(e => {
+        addBuff(e, { stat:'atk', value:-10, duration:9999, source:'赤眼の眼光' });
+        addBuff(e, { stat:'int', value:-10, duration:9999, source:'赤眼の眼光' });
+      });
+      addBuff(rin, { stat:'atk', value:20, duration:9999, source:'赤眼の眼光' });
+      addBuff(rin, { stat:'int', value:20, duration:9999, source:'赤眼の眼光' });
+      addBuff(rin, { stat:'def', value:20, duration:9999, source:'赤眼の眼光' });
+    });
+  }
+
+  // Monet
+  const monet = battle.units.find(u => u.id === 'monet');
+  if(monet){
+    battle.on('battleStart', () => {
+      alliesOf(monet).forEach(a => a.shields += Math.round(num(a.initialTroops) * 0.20));
+    });
+    battle.on('controlAttempt', ({ source, target, status, payload }) => {
+      if(target !== monet) return;
+      if(monet.shields <= 0) return;
+      if(!CONTROL_SET.has(status)) return;
+      if(Math.random() < 0.45){
+        payload.cancelled = true;
+        if(source && Math.random() < 0.50){
+          applyDamage(battle, monet, source, skillDamage(monet, source, 1.00, 'int'), '幻影の芸術');
+          if(Math.random() < 0.25) addStatus(source, { type:'confusion', duration:1, source:'幻影の芸術' });
+        }
+      }
+    });
+  }
+
+  // Carl
+  const carl = battle.units.find(u => u.id === 'carl');
+  if(carl){
+    battle.on('battleStart', () => { carl.prepared.rock = 1; });
+  }
+
+  // Mark
+  const mark = battle.units.find(u => u.id === 'mark');
+  if(mark){
+    mark.activeChanceBonusPct += 15;
+    battle.on('battleStart', () => { mark.invincibleTurns = 4; });
+    battle.on('skillSuccess', ({ caster, skill }) => {
+      if(caster !== mark || !skill || skill.category !== 'active') return;
+      mark.markStacks = Math.min(20, (mark.markStacks || 0) + 1);
+    });
+  }
+
+  // Zono
+  const zono = battle.units.find(u => u.id === 'zono');
+  if(zono){
+    battle.on('turnStart', () => { zono.rng = Math.max(1, num(zono.rng) - 2); });
+    battle.on('turnEnd', () => {
+      if(battle.turn >= 3 && isAlive(zono)){
+        const e = pick(enemiesOf(zono).filter(isAlive));
+        if(e) applyDamage(battle, zono, e, skillDamage(zono, e, 1.50, 'atk'), '狂気のバーサーカー');
+      }
+    });
+  }
+
+  // George
+  const george = battle.units.find(u => u.id === 'george');
+  if(george){
+    george.normalHits = 2;
+    battle.on('normalAttack', ({ attacker, kind }) => {
+      if(kind !== 'normal') return;
+      if(!sameTeam(attacker, george)) return; // only same team normal attacks
+      if(Math.random() < 0.45){
+        george.ambush = Math.min(10, (george.ambush || 0) + 1);
+      }
+    });
+  }
+}
+
+function commanderForSide(side){
+  return app.battle ? app.battle.sides[side][0] : null;
+}
+function randomEnemy(unit){
+  return pick(enemiesOf(unit).filter(isAlive));
+}
+
+// -------- special active/passive implementations for heroes not yet covered --------
+function lowestHpAlly(unit){ return alliesOf(unit).slice().sort((a,b)=>num(a.currentTroops)-num(b.currentTroops))[0] || null; }
+
+// patch battle methods for passives that need per-turn work
+function onBattleLoaded(){
+  // attach passives using events
+  if(!app.battle) return;
+  const battle = app.battle;
+
+  const george = battle.units.find(u=>u.id==='george');
+  if(george){
+    battle.on('normalAttack', ({ attacker, kind }) => {
+      if(kind !== 'normal') return;
+      if(!sameTeam(attacker, george)) return;
+      if(Math.random() < 0.45) george.ambush = Math.min(10, george.ambush + 1);
+    });
+  }
+
+  // gather power passive
+  const gatherers = battle.units.filter(u => u.id === 'carl' || u.id === 'monet' || u.id === 'mark' || u.id === 'george' || u.id === 'lin' || u.id === 'zono' || u.id === 'kublai' || u.id === 'zenobia' || u.id === 'lincoln' || u.id === 'galileo' || u.id === 'nobunaga');
+  // no-op; passives registered in skill setup
+}
+
+Battle.prototype.processTurnStartPassives = function(){
+  this.units.forEach(u => {
+    // gather power
+    if(u.id === 'carl' || u.id === 'mark' || u.id === 'george' || u.id === 'lin' || u.id === 'galileo' || u.id === 'nobunaga' || u.id === 'zenobia' || u.id === 'kublai' || u.id === 'lincoln' || u.id === 'monet' || u.id === 'zono'){
+      // handled via event registration if needed
+    }
+  });
+};
+
+// skill-specific active passives
+function skillFollowShot(battle, caster, target, skill){
+  for(let i=0;i<2;i++) applyDamage(battle, caster, target, skillDamage(caster,target,1.10,'int'), '追撃の銃弾');
+}
+function skillSupply(battle, caster, target, skill){
+  applyDamage(battle, caster, target, skillDamage(caster,target,0.70,'int'), '継戦補給');
+  sample(alliesOf(caster), 2).forEach(t => applyHeal(battle, caster, t, healAmount(caster, t, 1.20, 'int'), '継戦補給'));
+}
+function skillRepairDefense(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillBudo(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillSagePlot(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillEloquence(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillPurge(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillZangeki(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillNenrikiHeal(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillDragonRoar(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillFlowBlazeDance(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillStillnessPrayer(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillRockHammer(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+
+function enterBattle(){
+  try{
+    app.battle = new Battle(clone(app.teams));
+    setupBattleScripts(app.battle);
+    app.battle.log('準備完了');
+    app.battle.viewTurn = 0;
+    renderAll();
+  }catch(err){
+    alert('戦闘開始エラー: ' + err.message);
+    console.error(err);
+  }
+}
+
+function nextStep(){
+  if(!app.battle) return alert('先に戦闘開始を押してください');
+  if(app.battle.finished){
+    app.battle.log('戦闘終了済み');
+    renderAll();
+    return;
+  }
+  app.battle.nextChunk();
+  app.battle.viewTurn = app.battle.turn;
+  renderAll();
+}
+
+function setSampleTeam(){
+  app.teams = clone(DEFAULT_TEAMS);
+  saveState();
+  renderAll();
+}
+
+function clearLog(){
+  if(!app.battle) return;
+  app.battle.logsByTurn = { [app.battle.turn]: [] };
+  app.battle.viewTurn = app.battle.turn;
+  renderAll();
+}
+
+function initButtons(){
+  document.getElementById('btnLoadDefault').onclick = () => {
+    if(!confirm('初期データに戻しますか？')) return;
+    localStorage.removeItem(STORE.heroes);
+    localStorage.removeItem(STORE.skills);
+    localStorage.removeItem(STORE.teams);
+    location.reload();
+  };
+  document.getElementById('btnSample').onclick = setSampleTeam;
+  document.getElementById('btnSave').onclick = () => {
+    try{
+      app.heroes = JSON.parse(document.getElementById('heroesJson').value);
+      app.skills = JSON.parse(document.getElementById('skillsJson').value);
+      saveState();
+      renderAll();
+      alert('保存しました');
+    }catch(err){
+      alert('JSONエラー: ' + err.message);
+    }
+  };
+  document.getElementById('btnStart').onclick = enterBattle;
+  document.getElementById('btnNext').onclick = nextStep;
+  document.getElementById('btnAuto').onclick = () => {
+    if(app.auto) return;
+    app.auto = setInterval(() => {
+      if(!app.battle || app.battle.finished){
+        clearInterval(app.auto);
+        app.auto = null;
+        return;
+      }
+      nextStep();
+    }, 350);
+  };
+  document.getElementById('btnStop').onclick = () => {
+    if(app.auto) clearInterval(app.auto);
+    app.auto = null;
+  };
+  document.getElementById('btnClearLog').onclick = clearLog;
+  document.getElementById('btnCopyLog').onclick = async () => {
+    try{
+      await navigator.clipboard.writeText(document.getElementById('log').textContent || '');
+      alert('ログをコピーしました');
+    }catch{
+      prompt('コピーしてください', document.getElementById('log').textContent || '');
+    }
+  };
+  document.getElementById('btnSaveHeroes').onclick = () => {
+    try{
+      app.heroes = JSON.parse(document.getElementById('heroesJson').value);
+      saveState();
+      renderAll();
+      alert('英傑を保存しました');
+    }catch(err){
+      alert('英傑JSONエラー: ' + err.message);
+    }
+  };
+  document.getElementById('btnSaveSkills').onclick = () => {
+    try{
+      app.skills = JSON.parse(document.getElementById('skillsJson').value);
+      saveState();
+      renderAll();
+      alert('スキルを保存しました');
+    }catch(err){
+      alert('スキルJSONエラー: ' + err.message);
+    }
+  };
+  document.getElementById('btnRefresh').onclick = renderAll;
+}
+
+window.updateSlot = updateSlot;
+
+window.addEventListener('error', (e) => {
+  console.error(e.error || e.message);
+  if(document.getElementById('log')){
+    document.getElementById('log').textContent += `\n【クラッシュ防止】${e?.error?.message || e.message}`;
+  }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  initButtons();
+  renderAll();
+  setLog('準備完了。サンプル編成を押して戦闘開始してください。');
+});
+
+
+function skillRepairDefense(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillBudo(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillSagePlot(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillEloquence(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillPurge(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillZangeki(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillNenrikiHeal(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillDragonRoar(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillFlowBlazeDance(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillStillnessPrayer(battle, caster, skill){ return executeSkill(battle, caster, skill); }
+function skillRockHammer(battle, caster, skill){ return executeSkill(battle, caster, skill); }
